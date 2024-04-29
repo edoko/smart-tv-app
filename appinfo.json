@@ -1,0 +1,9 @@
+{
+    "id": "com.kreek.tvapp",
+    "version": "1.0.0",
+    "vendor": "kreek",
+    "type": "web",
+    "main": "index.html",
+    "title": "Test TV App",
+    "icon": "icon.png"
+}

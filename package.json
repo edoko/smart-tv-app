@@ -7,7 +7,10 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "run:webos": "tsc && vite build && ares-launch -s 23 -sp /Applications ./dist",
+    "build:webos": "tsc && vite build && ares-package -o ./outputs/webos ./dist",
+    "build:tizen": "tsc && vite build && tizen package -- ./dist -s ~/cert.p12 -t wgt -o ./outputs/tizen"
   },
   "dependencies": {
     "axios": "1.6.8",
@@ -38,5 +41,6 @@
     "prettier-plugin-tailwindcss": "0.5.14",
     "typescript": "5.4.5",
     "vite": "5.2.10"
-  }
+  },
+  "packageManager": "pnpm@9.0.6+sha256.0624e30eff866cdeb363b15061bdb7fd9425b17bc1bb42c22f5f4efdea21f6b3"
 }
