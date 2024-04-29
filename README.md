@@ -1,4 +1,4 @@
-# Test TV App
+# Smart TV App
 TODO
 
 ## Requirements

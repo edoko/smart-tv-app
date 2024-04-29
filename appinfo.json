@@ -4,6 +4,6 @@
     "vendor": "kreek",
     "type": "web",
     "main": "index.html",
-    "title": "Test TV App",
+    "title": "Smart TV App",
     "icon": "icon.png"
 }
