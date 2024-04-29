@@ -43,7 +43,7 @@ pnpm run build:tizen
 ### For tizen
 - tizen의 경우 2016년 모델 이후는 앱 실행 속도를 위해 `registerKeyBatch()`를 사용해야 함
 ```
-// 앱 열자마자 tizne인지 판단하고 아래를 먼저 실행하면 될듯
+// 앱 열자마자 tizen인지 판단하고 아래를 먼저 실행하면 될듯
 tizen.tvinputdevice.registerKeyBatch(['MediaPlay', 'MediaPause', ...])
 ```
 - 위 메서드를 실행하려면 `config.xml`에서 미리 권한 추가 필요함
