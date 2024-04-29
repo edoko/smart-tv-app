@@ -38,6 +38,7 @@ pnpm run build:tizen
 - webOS keycodes: https://webostv.developer.lge.com/develop/guides/magic-remote
 - tizen Smart TV keycodes: https://developer.samsung.com/smarttv/develop/guides/user-interaction/remote-control.html
 - keycode(MDN): https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyCode#non-printable_keys_function_keys
+
 주요 버튼들은 뒤로가기 제외하고는 keycode가 동일함
 
 ### For tizen
