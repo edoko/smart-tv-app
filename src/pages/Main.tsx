@@ -1,13 +1,18 @@
 import mockList from '@/const/mock'
 import Item from '@/features/Videos/components/Item'
 import useMappingController from '@/hooks/useMappingController'
+import { useSideBarStore } from '@/stores/sideBarStore'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { throttle } from 'throttle-debounce'
 
-const MainPage = () => {
+const Main = () => {
+  const { open, isOpenPage } = useSideBarStore()
+
   const [list] = useState(mockList)
   const [listIndex, setListIndex] = useState(0)
   const [itemIndex, setItemIndex] = useState(0)
+
+  const ref = useRef<HTMLDivElement>(null)
 
   const itemRefs = useRef<HTMLDivElement[][]>(
     Array.from({ length: list.length }, () => []),
@@ -32,7 +37,10 @@ const MainPage = () => {
     })
   }, [itemIndex, listIndex])
   const handleMoveLeft = () => {
-    if (itemIndex === 0) return
+    if (itemIndex === 0) {
+      open()
+      return
+    }
 
     throttleFunc(itemIndex - 1)
   }
@@ -62,9 +70,16 @@ const MainPage = () => {
     down: handleMoveDown,
   })
 
+  useEffect(() => {
+    if (isOpenPage) {
+      ref.current?.focus()
+    }
+  }, [isOpenPage])
+
   return (
     <div
-      className="flex h-full flex-col"
+      ref={ref}
+      className="flex h-full flex-col overflow-x-auto p-8"
       tabIndex={0}
       onKeyDown={handleKeyDown}
     >
@@ -73,7 +88,7 @@ const MainPage = () => {
         {list.map((item, idx) => (
           <div key={item.id} className="mb-8">
             <h2 className="text-lg font-bold">{item.title}</h2>
-            <div className="scrollbar-hide flex w-[1200px] flex-row flex-nowrap overflow-x-scroll">
+            <div className="scrollbar-hide flex flex-row flex-nowrap overflow-x-scroll">
               {item.list.map((data, i) => {
                 return (
                   <Item
@@ -94,4 +109,4 @@ const MainPage = () => {
   )
 }
 
-export default MainPage
+export default Main
