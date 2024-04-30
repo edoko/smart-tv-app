@@ -4,7 +4,9 @@ TODO
 ## Requirements
 1. node 18.x >
 2. pnpm
-3. webOS SDK / Simulator
+3. Intel VT-x/HAXM 지원
+3-1. AMD의 가상화는 tizen에서 지원하지 않음. 리눅스에서 구동해야 함.
+4. webOS SDK / Simulator
 5. tizen studio/sdk
 6. tizen certificate (빌드 시 인증서 필요)
 
@@ -66,3 +68,24 @@ tizen.tvinputdevice.registerKeyBatch(['MediaPlay', 'MediaPause', ...])
 | Stop                     | 413        | 413        |
 | Fast-forward             | 417        | 417        |
 | Rewind                   | 412        | 412        |
+
+
+## TO-DO
+- [x] 방향키 동작
+  - [x] webOS
+  - [ ] tizen 
+- [ ] 확인/뒤로가기 동작
+  - [ ] webOS
+  - [ ] tizen 
+- [ ] 재생 관련 버튼 동작
+  - [ ] webOS
+  - [ ] tizen 
+- [x] 사이드바 구현
+- [x] 사이드바 <-> 화면 이동
+- [ ] 페이지 이동
+  - [ ] 진입
+  - [ ] 뒤로가기
+- [ ] 영상 재생
+- [ ] 앱 실행 시 세션 체크
+- [ ] 스타일링
+- [ ] 리팩토링
