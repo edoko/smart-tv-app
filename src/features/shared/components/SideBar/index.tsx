@@ -21,7 +21,7 @@ const SideBar = () => {
   const navigate = useNavigate()
 
   const ref = useRef<HTMLDivElement>(null)
-  const [index, setIndex] = useState(0)
+  const [index, setIndex] = useState(selectedId)
 
   const handleMoveRight = () => {
     close()
@@ -73,9 +73,6 @@ const SideBar = () => {
           style={{
             color: i === index ? 'white' : 'gray',
           }}
-          onFocusCapture={() => console.log('focus')}
-
-          // onKeyDown={() => selectMenu(item.id)}
         >
           {item.name}
         </div>
