@@ -3,7 +3,7 @@ import { create } from 'zustand'
 interface SideBarState {
   isOpenSideBar: boolean
   isOpenPage: boolean
-  selected: number
+  selectedId: number
   open: () => void
   close: () => void
   selectMenu: (id: number) => void
@@ -12,8 +12,8 @@ interface SideBarState {
 export const useSideBarStore = create<SideBarState>((set) => ({
   isOpenSideBar: false,
   isOpenPage: true,
-  selected: 0,
+  selectedId: 0,
   open: () => set(() => ({ isOpenSideBar: true, isOpenPage: false })),
   close: () => set(() => ({ isOpenSideBar: false, isOpenPage: true })),
-  selectMenu: (id: number) => set(() => ({ selected: id })),
+  selectMenu: (id: number) => set(() => ({ selectedId: id })),
 }))

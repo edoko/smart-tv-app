@@ -1,24 +1,24 @@
 import useMappingController from '@/hooks/useMappingController'
 import { useSideBarStore } from '@/stores/sideBarStore'
 import { useEffect, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const list = [
   {
     id: 0,
     name: 'Home',
+    path: '/main/home',
   },
   {
     id: 1,
     name: 'Programs',
-  },
-  {
-    id: 2,
-    name: 'Contact',
+    path: '/main/programs',
   },
 ]
 
 const SideBar = () => {
-  const { isOpenSideBar, selectMenu, close } = useSideBarStore()
+  const { isOpenSideBar, selectedId, selectMenu, close } = useSideBarStore()
+  const navigate = useNavigate()
 
   const ref = useRef<HTMLDivElement>(null)
   const [index, setIndex] = useState(0)
@@ -39,6 +39,7 @@ const SideBar = () => {
     right: handleMoveRight,
     up: handleMoveUp,
     down: handleMoveDown,
+    enter: () => navigate(`${list[index].path}`),
   })
 
   useEffect(() => {
@@ -46,6 +47,14 @@ const SideBar = () => {
       ref.current?.focus()
     }
   }, [isOpenSideBar])
+
+  useEffect(() => {
+    const selected = list[index]
+    if (selectedId !== selected.id) {
+      selectMenu(selected.id)
+      navigate(selected.path)
+    }
+  }, [index, navigate, selectMenu, selectedId])
 
   return (
     <div
@@ -64,7 +73,9 @@ const SideBar = () => {
           style={{
             color: i === index ? 'white' : 'gray',
           }}
-          onKeyDown={() => selectMenu(item.id)}
+          onFocusCapture={() => console.log('focus')}
+
+          // onKeyDown={() => selectMenu(item.id)}
         >
           {item.name}
         </div>
