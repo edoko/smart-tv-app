@@ -1,4 +1,5 @@
 import { LOCALSTORAGE_API_KEY } from '@/features/shared/const'
+import setToken from '@/utils/setToken'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -9,10 +10,12 @@ const SplashPage = () => {
     const apiToken = localStorage.getItem(LOCALSTORAGE_API_KEY)
     let timeout: NodeJS.Timeout
     if (apiToken) {
+      setToken(apiToken)
       timeout = setTimeout(() => {
-        navigate('/main')
+        navigate('/main/home')
       }, 2000)
     } else {
+      setToken(import.meta.env.VITE_API_KEY)
       localStorage.setItem(LOCALSTORAGE_API_KEY, import.meta.env.VITE_API_KEY)
     }
 
