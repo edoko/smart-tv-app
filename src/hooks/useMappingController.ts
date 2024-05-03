@@ -9,10 +9,13 @@ interface useMappingControllerProps {
   right?: KeyboardCallbackType
   up?: KeyboardCallbackType
   down?: KeyboardCallbackType
+  enter?: KeyboardCallbackType
+  back?: KeyboardCallbackType
+}
 }
 
 function useMappingController(props: useMappingControllerProps) {
-  const { left, right, up, down } = props
+  const { left, right, up, down, enter, back } = props
   const isMounted = useRef(false)
 
   const onKeyDown = useCallback(
@@ -30,11 +33,17 @@ function useMappingController(props: useMappingControllerProps) {
         case mappingKeys.DOWN:
           down?.(e)
           break
+        case mappingKeys.ENTER:
+          enter?.(e)
+          break
+        case mappingKeys.BACK:
+          back?.(e)
+          break
         default:
           break
       }
     },
-    [down, left, right, up],
+    [back, down, enter, left, right, up],
   )
 
   useEffect(() => {
