@@ -12,6 +12,13 @@ interface useMappingControllerProps {
   enter?: KeyboardCallbackType
   back?: KeyboardCallbackType
 }
+
+function debugKeys(e: KeyboardEventType) {
+  console.log({
+    keyCode: e.keyCode,
+    key: e.key,
+    code: e.code,
+  })
 }
 
 function useMappingController(props: useMappingControllerProps) {
@@ -20,6 +27,8 @@ function useMappingController(props: useMappingControllerProps) {
 
   const onKeyDown = useCallback(
     (e: KeyboardEventType) => {
+      process.env.NODE_ENV === 'development' && debugKeys(e)
+
       switch (e.keyCode) {
         case mappingKeys.LEFT:
           left?.(e)
