@@ -11,6 +11,7 @@ const Item = forwardRef<HTMLDivElement, ItemProps>(
     return (
       <div
         ref={ref}
+        data-id={data.id}
         className={clsx('mr-4 flex w-[240px] flex-col', {
           'border-4 border-gray-200': selected,
         })}

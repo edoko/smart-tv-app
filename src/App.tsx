@@ -1,13 +1,13 @@
 import { Route, Routes } from 'react-router-dom'
-import SideBar from './features/shared/components/SideBar'
-import Main from './pages/Main'
+import IndexPage from './pages'
+import DetailPage from './pages/Detail'
 
 function App() {
   return (
-    <div className="flex h-full w-full flex-row">
-      <SideBar />
+    <div>
       <Routes>
-        <Route path="/" element={<Main />} />
+        <Route path="/main/*" element={<IndexPage />} />
+        <Route path="/detail/:id" element={<DetailPage />} />
       </Routes>
     </div>
   )

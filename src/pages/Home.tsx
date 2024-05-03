@@ -3,17 +3,18 @@ import Item from '@/features/Videos/components/Item'
 import useMappingController from '@/hooks/useMappingController'
 import { useSideBarStore } from '@/stores/sideBarStore'
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { throttle } from 'throttle-debounce'
 
-const Main = () => {
+const Home = () => {
   const { open, isOpenPage } = useSideBarStore()
+  const navigate = useNavigate()
 
   const [list] = useState(mockList)
   const [listIndex, setListIndex] = useState(0)
   const [itemIndex, setItemIndex] = useState(0)
 
   const ref = useRef<HTMLDivElement>(null)
-
   const itemRefs = useRef<HTMLDivElement[][]>(
     Array.from({ length: list.length }, () => []),
   )
@@ -36,6 +37,12 @@ const Main = () => {
       inline: 'start',
     })
   }, [itemIndex, listIndex])
+  useEffect(() => {
+    if (isOpenPage) {
+      ref.current?.focus()
+    }
+  }, [isOpenPage])
+
   const handleMoveLeft = () => {
     if (itemIndex === 0) {
       open()
@@ -44,23 +51,26 @@ const Main = () => {
 
     throttleFunc(itemIndex - 1)
   }
-
   const handleMoveRight = () => {
     if (itemIndex === list[listIndex].list.length - 1) return
 
     throttleFunc(itemIndex + 1)
   }
-
   const handleMoveUp = () => {
     if (listIndex === 0) return
     setListIndex(listIndex - 1)
     setItemIndex(0) // 목록을 이동할 때 아이템 인덱스를 초기화
   }
-
   const handleMoveDown = () => {
     if (listIndex === list.length - 1) return
     setListIndex(listIndex + 1)
     setItemIndex(0) // 목록을 이동할 때 아이템 인덱스를 초기화
+  }
+  const handleEnter = () => {
+    const itemId =
+      itemRefs.current[listIndex][itemIndex].getAttribute('data-id')
+    console.log('enter', itemId)
+    navigate(`/detail/${itemId}`)
   }
 
   const handleKeyDown = useMappingController({
@@ -68,13 +78,8 @@ const Main = () => {
     right: handleMoveRight,
     up: handleMoveUp,
     down: handleMoveDown,
+    enter: handleEnter,
   })
-
-  useEffect(() => {
-    if (isOpenPage) {
-      ref.current?.focus()
-    }
-  }, [isOpenPage])
 
   return (
     <div
@@ -109,4 +114,4 @@ const Main = () => {
   )
 }
 
-export default Main
+export default Home
