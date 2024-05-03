@@ -23,3 +23,5 @@ outputs
 *.njsproj
 *.sln
 *.sw?
+
+.env*

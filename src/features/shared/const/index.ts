@@ -1,0 +1,1 @@
+export const LOCALSTORAGE_API_KEY = 'API_KEY'

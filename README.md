@@ -103,7 +103,8 @@ tizen.tvinputdevice.registerKeyBatch(['MediaPlay', 'MediaPause', ...])
     - [ ] browser
   - [ ] 백버튼 시 영상 종료 후 이전 화면 이동(또는 오버레이여서 닫기)
 - [ ] Coverr API 최소한으로 연동
-  - [ ] 최초 진입 스플래시 화면 구현
+  - [x] 최초 진입 스플래시 화면 구현
+    - [x] 진입할 때 발급받은 API 토큰을 로컬 스토리지에 저장
   - [ ] 홈 화면
     - [ ] 몰?루
   - [ ] 프로그램 목록 화면 (추천 동영상 목록)
