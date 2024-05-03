@@ -1,8 +1,9 @@
+import { Video } from '@/pages/Programs'
 import clsx from 'clsx'
 import { forwardRef } from 'react'
 
 interface ItemProps {
-  data: any
+  data: Video
   selected: boolean
 }
 
@@ -18,7 +19,7 @@ const Item = forwardRef<HTMLDivElement, ItemProps>(
         style={{ flex: '0 0 auto' }}
       >
         <img
-          src={data.img_url}
+          src={data.thumbnail}
           alt={data.title}
           className="mb-2 h-[120px] w-[240px] rounded-md object-cover"
         />
