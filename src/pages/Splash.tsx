@@ -7,16 +7,18 @@ const SplashPage = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
+    const timeout: NodeJS.Timeout = setTimeout(() => {
+      navigate('/main/home')
+    }, 2000)
+
     const apiToken = localStorage.getItem(LOCALSTORAGE_API_KEY)
-    let timeout: NodeJS.Timeout
     if (apiToken) {
       setToken(apiToken)
-      timeout = setTimeout(() => {
-        navigate('/main/home')
-      }, 2000)
+      timeout
     } else {
       setToken(import.meta.env.VITE_API_KEY)
       localStorage.setItem(LOCALSTORAGE_API_KEY, import.meta.env.VITE_API_KEY)
+      timeout
     }
 
     return () => {
