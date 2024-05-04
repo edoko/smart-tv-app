@@ -76,7 +76,7 @@ tizen.tvinputdevice.registerKeyBatch(['MediaPlay', 'MediaPause', ...])
   - [ ] tizen 
   - [x] browser
 - [ ] 확인/뒤로가기 동작
-  - [ ] webOS
+  - [x] webOS
   - [ ] tizen 
   - [x] browser
 - [x] 사이드바
@@ -87,7 +87,7 @@ tizen.tvinputdevice.registerKeyBatch(['MediaPlay', 'MediaPause', ...])
   - [x] 진입
   - [x] 뒤로가기
 - 백버튼으로 앱 종료
-  - [ ] webOS
+  - [x] webOS
   - [ ] tizen
 - [x] 페이지 구조는 HashRouter 이용 (빠른 동작. 그리고 URL 구조는 보이는게 아니니 대충)
   - [x] 홈 화면: `/main/home`
