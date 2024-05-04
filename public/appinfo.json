@@ -5,5 +5,6 @@
     "type": "web",
     "main": "index.html",
     "title": "Test TV App",
-    "icon": "icon.png"
+    "icon": "icon.png",
+    "disableBackHistoryAPI": true
 }

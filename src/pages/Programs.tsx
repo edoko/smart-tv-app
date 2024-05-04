@@ -2,6 +2,7 @@ import client from '@/apis/client'
 import Item from '@/features/Videos/components/Item'
 import useMappingController from '@/hooks/useMappingController'
 import { useSideBarStore } from '@/stores/sideBarStore'
+import getOS from '@/utils/getOS'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { throttle } from 'throttle-debounce'
@@ -72,7 +73,6 @@ const Programs = () => {
           page_size: 10,
         },
       })
-      console.log(data.hits)
       setList(data.hits)
     } catch (error) {
       console.error(error)
@@ -101,6 +101,13 @@ const Programs = () => {
     left: handleMoveLeft,
     right: handleMoveRight,
     enter: handleEnter,
+    back: () => {
+      if (getOS() === 'webOS') {
+        ;(window as any).webOSSystem.platformBack()
+      } else if (getOS() === 'tizen') {
+        // TODO
+      }
+    },
   })
 
   useEffect(() => {
