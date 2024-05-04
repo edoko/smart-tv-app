@@ -4,13 +4,12 @@ const getOS = () => {
   }
 
   const w = window as any
-  switch (window as any) {
-    case w.tizen:
-      return 'tizen'
-    case w.webOS:
-      return 'webOS'
-    default:
-      return 'browser'
+  if (w.tizen) {
+    return 'tizen'
+  } else if (w.webOSSystem) {
+    return 'webOS'
+  } else {
+    return 'browser'
   }
 }
 
