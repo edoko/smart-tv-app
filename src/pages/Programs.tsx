@@ -3,6 +3,7 @@ import Item from '@/features/Videos/components/Item'
 import useMappingController from '@/hooks/useMappingController'
 import { useSideBarStore } from '@/stores/sideBarStore'
 import getOS from '@/utils/getOS'
+import { useQuery } from '@tanstack/react-query'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { throttle } from 'throttle-debounce'
@@ -52,10 +53,38 @@ const Programs = () => {
   const { open, isOpenPage } = useSideBarStore()
   const navigate = useNavigate()
 
-  const [isLoaded, setLoaded] = useState(true)
-  const [list, setList] = useState<NormalizedVideo[]>([])
   const [listIndex, setListIndex] = useState(0)
   const [itemIndex, setItemIndex] = useState(0)
+
+  const { data: list, isPending } = useQuery<NormalizedVideo[]>({
+    queryKey: ['videos'],
+    queryFn: async () => {
+      const { data } = await client.get<VideosResponse>('/videos', {
+        params: {
+          page: 0,
+          page_size: 10,
+          sort_by: 'popularity'
+        },
+      })
+      const { data: data2 } = await client.get<VideosResponse>('/videos', {
+        params: {
+          page: 0,
+          page_size: 10,
+          sort_by: 'date'
+        },
+      })
+      
+      return [{
+        id: 1,
+        name: 'Popularity',
+        list: data.hits,
+      }, {
+        id: 2,
+        name: 'Date',
+        list: data2.hits,
+      }]
+    },
+  })
 
 
   const ref = useRef<HTMLDivElement>(null)
@@ -75,41 +104,6 @@ const Programs = () => {
     [listIndex],
   )
 
-  const fetchRecommendedProgramList = async () => {
-    setLoaded(true)
-    try {
-      const { data } = await client.get<VideosResponse>('/videos', {
-        params: {
-          page: 0,
-          page_size: 10,
-          sort_by: 'popularity'
-        },
-      })
-      const { data: data2 } = await client.get<VideosResponse>('/videos', {
-        params: {
-          page: 0,
-          page_size: 10,
-          sort_by: 'date'
-        },
-      })
-      setList([
-        {
-          id: 1,
-          name: 'Popularity',
-          list: data.hits,
-        }, {
-          id: 2,
-          name: 'Date',
-          list: data2.hits,
-        }
-      ])
-    } catch (error) {
-      console.error(error)
-    } finally {
-      setLoaded(false)
-    }
-  }
-
   const handleMoveLeft = () => {
     if (itemIndex === 0) {
       open()
@@ -119,6 +113,7 @@ const Programs = () => {
     throttleFunc(itemIndex - 1)
   }
   const handleMoveRight = () => {
+    if (!list) return
     if (itemIndex === list[listIndex].list.length - 1) return
 
     throttleFunc(itemIndex + 1)
@@ -131,6 +126,7 @@ const Programs = () => {
   }
 
   const handleMoveDown = () => {
+    if (!list) return
     if (listIndex === list.length - 1) return
 
     setListIndex(listIndex + 1)
@@ -157,23 +153,19 @@ const Programs = () => {
   })
 
   useEffect(() => {
-     if (!isLoaded) {
+     if (!isPending) {
       itemRefs.current[listIndex][itemIndex]?.scrollIntoView({
         behavior: 'smooth',
         inline: 'start',
       })
      }
-  }, [itemIndex, itemIndex, isLoaded])
+  }, [itemIndex, itemIndex, isPending])
 
   useEffect(() => {
     if (isOpenPage) {
       ref.current?.focus()
     }
   }, [isOpenPage])
-
-  useEffect(() => {
-    fetchRecommendedProgramList()
-  }, [])
 
   return (
     <div
@@ -183,7 +175,7 @@ const Programs = () => {
       onKeyDown={handleKeyDown}
     >
       {/* 목록 */}
-        {!isLoaded && list.length > 0 && list.map((item, idx) => (
+        {!isPending && list?.map((item, idx) => (
           <React.Fragment key={item.id} >
           <h2 className="text-4xl">Sort by: {item.name}</h2>
           <div className="scrollbar-hide flex flex-row flex-nowrap overflow-x-scroll p-8">

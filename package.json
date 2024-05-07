@@ -13,6 +13,8 @@
     "build:tizen": "tsc && vite build && tizen package -- ./dist -s ~/cert.p12 -t wgt -o ./outputs/tizen"
   },
   "dependencies": {
+    "@tanstack/react-query": "5.35.1",
+    "@tanstack/react-query-devtools": "5.35.1",
     "axios": "1.6.8",
     "clsx": "2.1.1",
     "react": "18.3.1",
@@ -23,6 +25,7 @@
     "zustand": "4.5.2"
   },
   "devDependencies": {
+    "@tanstack/eslint-plugin-query": "5.32.1",
     "@types/node": "20.12.7",
     "@types/react": "18.3.1",
     "@types/react-dom": "18.3.0",
