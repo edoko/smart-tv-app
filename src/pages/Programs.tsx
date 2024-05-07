@@ -3,7 +3,7 @@ import Item from '@/features/Videos/components/Item'
 import useMappingController from '@/hooks/useMappingController'
 import { useSideBarStore } from '@/stores/sideBarStore'
 import getOS from '@/utils/getOS'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { throttle } from 'throttle-debounce'
 
@@ -42,40 +42,71 @@ interface VideosResponse {
   total: number
   hits: Video[]
 }
+interface NormalizedVideo {
+  id: number
+  name: string
+  list: Video[]
+}
 
 const Programs = () => {
   const { open, isOpenPage } = useSideBarStore()
   const navigate = useNavigate()
 
-  const [list, setList] = useState<Video[]>([])
+  const [isLoaded, setLoaded] = useState(true)
+  const [list, setList] = useState<NormalizedVideo[]>([])
+  const [listIndex, setListIndex] = useState(0)
   const [itemIndex, setItemIndex] = useState(0)
 
+
   const ref = useRef<HTMLDivElement>(null)
-  const itemRefs = useRef<HTMLDivElement[]>(Array.from({ length: list.length }))
+  const itemRefs = useRef<HTMLDivElement[][]>(
+    Array.from({ length: 20 }, () => []),
+  )
 
   const throttleFunc = useMemo(
     () =>
       throttle(100, (index) => {
         setItemIndex(index)
-        itemRefs.current[itemIndex]?.scrollIntoView({
+        itemRefs.current[listIndex][index]?.scrollIntoView({
           behavior: 'smooth',
           inline: 'start',
         })
       }),
-    [itemIndex],
+    [listIndex],
   )
 
   const fetchRecommendedProgramList = async () => {
+    setLoaded(true)
     try {
       const { data } = await client.get<VideosResponse>('/videos', {
         params: {
           page: 0,
           page_size: 10,
+          sort_by: 'popularity'
         },
       })
-      setList(data.hits)
+      const { data: data2 } = await client.get<VideosResponse>('/videos', {
+        params: {
+          page: 0,
+          page_size: 10,
+          sort_by: 'date'
+        },
+      })
+      setList([
+        {
+          id: 1,
+          name: 'Popularity',
+          list: data.hits,
+        }, {
+          id: 2,
+          name: 'Date',
+          list: data2.hits,
+        }
+      ])
     } catch (error) {
       console.error(error)
+    } finally {
+      setLoaded(false)
     }
   }
 
@@ -88,18 +119,33 @@ const Programs = () => {
     throttleFunc(itemIndex - 1)
   }
   const handleMoveRight = () => {
-    if (itemIndex === list.length - 1) return
+    if (itemIndex === list[listIndex].list.length - 1) return
 
     throttleFunc(itemIndex + 1)
   }
+  const handleMoveUp = () => {
+    if (listIndex === 0) return
+
+    setListIndex(listIndex - 1)
+    setItemIndex(0)
+  }
+
+  const handleMoveDown = () => {
+    if (listIndex === list.length - 1) return
+
+    setListIndex(listIndex + 1)
+    setItemIndex(0)
+  }
   const handleEnter = () => {
-    const itemId = itemRefs.current[itemIndex]?.getAttribute('data-id')
+    const itemId = itemRefs.current[listIndex][itemIndex]?.getAttribute('data-id')
     navigate(`/detail/${itemId}`)
   }
 
   const handleKeyDown = useMappingController({
     left: handleMoveLeft,
     right: handleMoveRight,
+    up: handleMoveUp,
+    down: handleMoveDown,
     enter: handleEnter,
     back: () => {
       if (getOS() === 'webOS') {
@@ -111,11 +157,13 @@ const Programs = () => {
   })
 
   useEffect(() => {
-    itemRefs.current[itemIndex]?.scrollIntoView({
-      behavior: 'smooth',
-      inline: 'start',
-    })
-  }, [itemIndex])
+     if (!isLoaded) {
+      itemRefs.current[listIndex][itemIndex]?.scrollIntoView({
+        behavior: 'smooth',
+        inline: 'start',
+      })
+     }
+  }, [itemIndex, itemIndex, isLoaded])
 
   useEffect(() => {
     if (isOpenPage) {
@@ -130,24 +178,31 @@ const Programs = () => {
   return (
     <div
       ref={ref}
-      className="flex h-full flex-col overflow-x-auto p-8"
+      className="flex h-full flex-col overflow-x-auto p-8 flex-1"
       tabIndex={0}
       onKeyDown={handleKeyDown}
     >
       {/* 목록 */}
-      <div className="scrollbar-hide flex flex-row flex-nowrap overflow-x-scroll p-8">
-        {list.map((item, idx) => (
-          <div key={item.id} data-id={item.id}>
-            <Item
-              ref={(el) => {
-                if (el) itemRefs.current[idx] = el
-              }}
-              data={item}
-              selected={itemIndex === idx}
-            />
+        {!isLoaded && list.length > 0 && list.map((item, idx) => (
+          <React.Fragment key={item.id} >
+          <h2 className="text-4xl">Sort by: {item.name}</h2>
+          <div className="scrollbar-hide flex flex-row flex-nowrap overflow-x-scroll p-8">
+            {
+              item.list.map((video, i) => (
+                <Item
+                  key={video.id}
+                  data-id={video.id}
+                  ref={(el) => {
+                    if (el) itemRefs.current[idx][i] = el
+                  }}
+                  data={video}
+                  selected={listIndex === idx && itemIndex === i}
+                />
+              ))
+            }
           </div>
+          </React.Fragment>
         ))}
-      </div>
     </div>
   )
 }
