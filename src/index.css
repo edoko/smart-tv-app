@@ -25,13 +25,10 @@ body {
   overflow: hidden;
 }
 
-* {
-  box-sizing: inherit;
+body {
+  height: 100vh;
 }
 
-html,
-body,
 #root {
   height: 100%;
-  height: 100vh;
 }

@@ -15,7 +15,7 @@ const IndexPage = () => {
   }, [])
 
   return (
-    <div className="flex h-full w-full flex-row">
+    <div className="flex w-full h-full flex-row flex-1">
       <SideBar />
       <Routes>
         <Route path="/home" element={<Home />} />

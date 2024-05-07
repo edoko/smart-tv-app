@@ -59,9 +59,10 @@ const SideBar = () => {
   return (
     <div
       ref={ref}
-      className="mt-12 flex h-full flex-col p-12"
+      className="flex h-full flex-col p-12"
       style={{
-        width: isOpenSideBar ? '350px' : '200px',
+        width: isOpenSideBar ? '20vw' : '10vw',
+        minWidth: 0
       }}
       tabIndex={0}
       onKeyDown={handleKeyDown}
@@ -69,12 +70,12 @@ const SideBar = () => {
       {list.map((item, i) => (
         <div
           key={item.id}
-          className="mb-12 cursor-pointer p-4 text-4xl last-of-type:mb-0"
+          className="mb-12 cursor-pointer p-4 text-4xl last-of-type:mb-0 text-center"
           style={{
             color: i === index ? 'white' : 'gray',
           }}
         >
-          {item.name}
+          {isOpenSideBar ? item.name : item.name.slice(0, 1)}
         </div>
       ))}
     </div>
