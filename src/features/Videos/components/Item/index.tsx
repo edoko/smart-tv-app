@@ -13,12 +13,15 @@ const Item = forwardRef<HTMLDivElement, ItemProps>(
         ref={ref}
         data-id={data.id}
         className="mr-4 flex w-[20vw] flex-col"
-        style={{ flex: '0 0 auto', 'boxShadow': selected ? '0 0 0 4px gray' : 'none' }}
+        style={{
+          flex: '0 0 auto',
+          boxShadow: selected ? '0 0 0 4px gray' : 'none',
+        }}
       >
         <img
           src={data.thumbnail}
           alt={data.title}
-          className="mb-2 w-full h-full rounded-md object-cover"
+          className="mb-2 h-full w-full rounded-md object-cover"
         />
         <span className="line-clamp-1 text-lg font-bold">{data.title}</span>
       </div>
