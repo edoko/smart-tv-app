@@ -1,5 +1,6 @@
 import useMappingController from '@/hooks/useMappingController'
 import { useSideBarStore } from '@/stores/sideBarStore'
+import getOS from '@/utils/getOS'
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -26,13 +27,18 @@ const SideBar = () => {
   const handleMoveRight = () => {
     close()
   }
-
   const handleMoveUp = () => {
     setIndex((prev) => Math.max(0, prev - 1))
   }
-
   const handleMoveDown = () => {
     setIndex((prev) => Math.min(list.length - 1, prev + 1))
+  }
+  const handleMoveBack = () => {
+    if (getOS() === 'webOS') {
+      ;(window as any).webOSSystem.platformBack()
+    } else if (getOS() === 'tizen') {
+      // TODO
+    }
   }
 
   const handleKeyDown = useMappingController({
@@ -40,6 +46,7 @@ const SideBar = () => {
     up: handleMoveUp,
     down: handleMoveDown,
     enter: () => navigate(`${list[index].path}`),
+    back: handleMoveBack,
   })
 
   useEffect(() => {
@@ -62,7 +69,7 @@ const SideBar = () => {
       className="flex h-full flex-col p-12"
       style={{
         width: isOpenSideBar ? '20vw' : '10vw',
-        minWidth: 0
+        minWidth: 0,
       }}
       tabIndex={0}
       onKeyDown={handleKeyDown}
@@ -70,7 +77,7 @@ const SideBar = () => {
       {list.map((item, i) => (
         <div
           key={item.id}
-          className="mb-12 cursor-pointer p-4 text-4xl last-of-type:mb-0 text-center"
+          className="mb-12 cursor-pointer p-4 text-center text-4xl last-of-type:mb-0"
           style={{
             color: i === index ? 'white' : 'gray',
           }}

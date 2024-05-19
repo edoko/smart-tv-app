@@ -2,7 +2,6 @@ import client from '@/apis/client'
 import Item from '@/features/Videos/components/Item'
 import useMappingController from '@/hooks/useMappingController'
 import { useSideBarStore } from '@/stores/sideBarStore'
-import getOS from '@/utils/getOS'
 import { useQuery } from '@tanstack/react-query'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -63,29 +62,31 @@ const Programs = () => {
         params: {
           page: 0,
           page_size: 10,
-          sort_by: 'popularity'
+          sort_by: 'popularity',
         },
       })
       const { data: data2 } = await client.get<VideosResponse>('/videos', {
         params: {
           page: 0,
           page_size: 10,
-          sort_by: 'date'
+          sort_by: 'date',
         },
       })
-      
-      return [{
-        id: 1,
-        name: 'Popularity',
-        list: data.hits,
-      }, {
-        id: 2,
-        name: 'Date',
-        list: data2.hits,
-      }]
+
+      return [
+        {
+          id: 1,
+          name: 'Popularity',
+          list: data.hits,
+        },
+        {
+          id: 2,
+          name: 'Date',
+          list: data2.hits,
+        },
+      ]
     },
   })
-
 
   const ref = useRef<HTMLDivElement>(null)
   const itemRefs = useRef<HTMLDivElement[][]>(
@@ -133,8 +134,12 @@ const Programs = () => {
     setItemIndex(0)
   }
   const handleEnter = () => {
-    const itemId = itemRefs.current[listIndex][itemIndex]?.getAttribute('data-id')
+    const itemId =
+      itemRefs.current[listIndex][itemIndex]?.getAttribute('data-id')
     navigate(`/detail/${itemId}`)
+  }
+  const handleMoveBack = () => {
+    open()
   }
 
   const handleKeyDown = useMappingController({
@@ -143,23 +148,17 @@ const Programs = () => {
     up: handleMoveUp,
     down: handleMoveDown,
     enter: handleEnter,
-    back: () => {
-      if (getOS() === 'webOS') {
-        ;(window as any).webOSSystem.platformBack()
-      } else if (getOS() === 'tizen') {
-        // TODO
-      }
-    },
+    back: handleMoveBack,
   })
 
   useEffect(() => {
-     if (!isPending) {
+    if (!isPending) {
       itemRefs.current[listIndex][itemIndex]?.scrollIntoView({
         behavior: 'smooth',
         inline: 'start',
       })
-     }
-  }, [itemIndex, itemIndex, isPending])
+    }
+  }, [itemIndex, isPending, listIndex])
 
   useEffect(() => {
     if (isOpenPage) {
@@ -170,17 +169,17 @@ const Programs = () => {
   return (
     <div
       ref={ref}
-      className="flex h-full flex-col overflow-x-auto p-8 flex-1"
+      className="flex h-full flex-1 flex-col overflow-x-auto p-8"
       tabIndex={0}
       onKeyDown={handleKeyDown}
     >
       {/* 목록 */}
-        {!isPending && list?.map((item, idx) => (
-          <React.Fragment key={item.id} >
-          <h2 className="text-4xl">Sort by: {item.name}</h2>
-          <div className="scrollbar-hide flex flex-row flex-nowrap overflow-x-scroll p-8">
-            {
-              item.list.map((video, i) => (
+      {!isPending &&
+        list?.map((item, idx) => (
+          <React.Fragment key={item.id}>
+            <h2 className="text-4xl">Sort by: {item.name}</h2>
+            <div className="scrollbar-hide flex flex-row flex-nowrap overflow-x-scroll p-8">
+              {item.list.map((video, i) => (
                 <Item
                   key={video.id}
                   data-id={video.id}
@@ -190,9 +189,8 @@ const Programs = () => {
                   data={video}
                   selected={listIndex === idx && itemIndex === i}
                 />
-              ))
-            }
-          </div>
+              ))}
+            </div>
           </React.Fragment>
         ))}
     </div>

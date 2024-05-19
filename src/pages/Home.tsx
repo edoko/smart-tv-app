@@ -16,9 +16,13 @@ const Home = () => {
   const handleMoveLeft = () => {
     open()
   }
+  const handleMoveBack = () => {
+    open()
+  }
 
   const handleKeyDown = useMappingController({
     left: handleMoveLeft,
+    back: handleMoveBack,
   })
 
   return (
