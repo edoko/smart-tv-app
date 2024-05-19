@@ -11,6 +11,12 @@ interface useMappingControllerProps {
   down?: KeyboardCallbackType
   enter?: KeyboardCallbackType
   back?: KeyboardCallbackType
+  // Media Buttons
+  play?: KeyboardCallbackType
+  stop?: KeyboardCallbackType
+  pause?: KeyboardCallbackType
+  fastForward?: KeyboardCallbackType
+  rewind?: KeyboardCallbackType
 }
 
 function debugKeys(e: KeyboardEventType) {
@@ -22,7 +28,19 @@ function debugKeys(e: KeyboardEventType) {
 }
 
 function useMappingController(props: useMappingControllerProps) {
-  const { left, right, up, down, enter, back } = props
+  const {
+    left,
+    right,
+    up,
+    down,
+    enter,
+    back,
+    play,
+    stop,
+    pause,
+    fastForward,
+    rewind,
+  } = props
   const isMounted = useRef(false)
 
   const onKeyDown = useCallback(
@@ -48,11 +66,39 @@ function useMappingController(props: useMappingControllerProps) {
         case mappingKeys.BACK:
           back?.(e)
           break
+        // media buttons
+        case mappingKeys.PLAY:
+          play?.(e)
+          break
+        case mappingKeys.STOP:
+          stop?.(e)
+          break
+        case mappingKeys.PAUSE:
+          pause?.(e)
+          break
+        case mappingKeys['FAST-FORWARD']:
+          fastForward?.(e)
+          break
+        case mappingKeys.REWIND:
+          rewind?.(e)
+          break
         default:
           break
       }
     },
-    [back, down, enter, left, right, up],
+    [
+      back,
+      down,
+      enter,
+      fastForward,
+      left,
+      pause,
+      play,
+      rewind,
+      right,
+      stop,
+      up,
+    ],
   )
 
   useEffect(() => {
