@@ -1,5 +1,5 @@
 import mappingKeys from '@/utils/mappingKeys'
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback } from 'react'
 
 type KeyboardEventType = KeyboardEvent | React.KeyboardEvent
 type KeyboardCallbackType = (e?: KeyboardEventType) => void
@@ -41,7 +41,6 @@ function useMappingController(props: useMappingControllerProps) {
     fastForward,
     rewind,
   } = props
-  const isMounted = useRef(false)
 
   const onKeyDown = useCallback(
     (e: KeyboardEventType) => {
@@ -100,17 +99,6 @@ function useMappingController(props: useMappingControllerProps) {
       up,
     ],
   )
-
-  useEffect(() => {
-    if (!isMounted.current) {
-      isMounted.current = true
-      document.addEventListener('keydown', onKeyDown)
-    }
-
-    return () => {
-      document.removeEventListener('keydown', onKeyDown)
-    }
-  }, [onKeyDown])
 
   return onKeyDown
 }
