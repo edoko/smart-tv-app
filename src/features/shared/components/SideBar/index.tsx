@@ -1,19 +1,22 @@
 import useMappingController from '@/hooks/useMappingController'
 import { useSideBarStore } from '@/stores/sideBarStore'
 import getOS from '@/utils/getOS'
+import clsx from 'clsx'
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const list = [
   {
     id: 0,
-    name: 'Home',
+    name: '내 보관함',
     path: '/main/home',
+    icon: 'Icon_myplaylists',
   },
   {
     id: 1,
-    name: 'Programs',
+    name: '설정',
     path: '/main/programs',
+    icon: 'Icon_setting',
   },
 ]
 
@@ -66,23 +69,46 @@ const SideBar = () => {
   return (
     <div
       ref={ref}
-      className="flex h-full flex-col p-12"
+      className="flex h-full flex-col items-center justify-center px-[80px]"
       style={{
-        width: isOpenSideBar ? '20vw' : '10vw',
         minWidth: 0,
       }}
       tabIndex={0}
       onKeyDown={handleKeyDown}
     >
       {list.map((item, i) => (
-        <div
-          key={item.id}
-          className="mb-12 cursor-pointer p-4 text-center text-4xl last-of-type:mb-0"
-          style={{
-            color: i === index ? 'white' : 'gray',
-          }}
-        >
-          {isOpenSideBar ? item.name : item.name.slice(0, 1)}
+        <div key={item.id} className="flex cursor-pointer p-5">
+          {isOpenSideBar && (
+            <div
+              className={clsx(
+                'flex w-[400px] flex-row items-center justify-start p-6',
+                i === index
+                  ? 'rounded-2xl border-[1px] border-solid border-[#EBEBEB] bg-[#303030]'
+                  : '',
+              )}
+            >
+              <img
+                src={`/src/assets/icons/${item.icon}.svg`}
+                alt={item.name}
+                className="mr-6 size-[56px]"
+              />
+              <span className="text-2xl font-bold">{item.name}</span>
+            </div>
+          )}
+          {!isOpenSideBar && (
+            <div
+              className={clsx(
+                'flex size-[96px] items-center justify-center',
+                i === index ? 'rounded-2xl bg-[#303030]' : '',
+              )}
+            >
+              <img
+                src={`/src/assets/icons/${item.icon}.svg`}
+                alt={item.name}
+                className="size-[56px]"
+              />
+            </div>
+          )}
         </div>
       ))}
     </div>
