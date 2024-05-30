@@ -20,6 +20,10 @@ const list = [
   },
 ]
 
+const getIconUrl = (name: string) => {
+  return new URL(`/public/assets/icons/${name}.svg`, import.meta.url).href
+}
+
 const SideBar = () => {
   const { isOpenSideBar, selectedId, selectMenu, close } = useSideBarStore()
   const navigate = useNavigate()
@@ -70,9 +74,6 @@ const SideBar = () => {
     <div
       ref={ref}
       className="flex h-full flex-col items-center justify-center px-[80px]"
-      style={{
-        minWidth: 0,
-      }}
       tabIndex={0}
       onKeyDown={handleKeyDown}
     >
@@ -88,7 +89,7 @@ const SideBar = () => {
               )}
             >
               <img
-                src={`/src/assets/icons/${item.icon}.svg`}
+                src={getIconUrl(item.icon)}
                 alt={item.name}
                 className="mr-6 size-[56px]"
               />
@@ -103,7 +104,7 @@ const SideBar = () => {
               )}
             >
               <img
-                src={`/src/assets/icons/${item.icon}.svg`}
+                src={getIconUrl(item.icon)}
                 alt={item.name}
                 className="size-[56px]"
               />

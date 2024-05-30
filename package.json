@@ -44,7 +44,8 @@
     "prettier-plugin-organize-imports": "3.2.4",
     "prettier-plugin-tailwindcss": "0.5.14",
     "typescript": "5.4.5",
-    "vite": "5.2.10"
+    "vite": "5.2.10",
+    "vite-plugin-svgr": "4.2.0"
   },
   "packageManager": "pnpm@9.1.1+sha256.9551e803dcb7a1839fdf5416153a844060c7bce013218ce823410532504ac10b"
 }
